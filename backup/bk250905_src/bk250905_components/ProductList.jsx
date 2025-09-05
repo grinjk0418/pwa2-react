@@ -1,4 +1,6 @@
+import ProductDetail from './ProductDetail.jsx';
 import './ProductList.css';
+import { useState } from 'react';
 
 function ProductList() {
   const products = [
@@ -7,20 +9,32 @@ function ProductList() {
     {id: 2, title: '양말', info: '좋은 양말', price: 1000, img: 'https://picsum.photos/id/42/3456/2304'},
   ];
 
+  const [modalFlg, setModalFlg] = useState(false);
+
+  const [propsProduct, setPropsProduct] = useState({});
+
+  const viewModal = (item) => {
+    setPropsProduct({...item});
+    setModalFlg(true);
+  }
+    // 리액트는 최상단 요소 하나만 올라가야되서 <> 빈걸로 묶어.. html엔 표시 안됨..
   return (
-    <div className='card-container'>
-      {
-        products.map((item) => {
-          return (
-            <div className='card' key={item.id}>
-              <div className="card-img" style={{backgroundImage: `url('${item.img}')`}}></div>
-              <p className="card-title">{item.title}</p>
-              <p className="card-price">{item.price}</p>
-            </div>
-          )
-        })
-      }
-    </div>
+    <>
+      { modalFlg && <ProductDetail product={propsProduct} setModalFlg={setModalFlg}></ProductDetail> }
+      <div className='card-container'>
+        {
+          products.map((item) => {
+            return (
+              <div className='card' key={item.id} onClick={() => {viewModal(item)}}>
+                <div className="card-img" style={{backgroundImage: `url('${item.img}')`}}></div>
+                <p className="card-title">{item.title}</p>
+                <p className="card-price">{item.price}</p>
+              </div>
+            )
+          })
+        }
+      </div>
+    </>
   )
 }
 
